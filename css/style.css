@@ -29,6 +29,10 @@
           box-sizing: border-box;
 }
 
+.ad-form__element:invalid input, .ad-form__element:invalid select {
+  border: 2px solid red;
+}
+
 .content-box-component {
   -webkit-box-sizing: content-box;
           box-sizing: content-box;
