@@ -39,12 +39,15 @@
         y: moveEvt.clientY,
       };
 
-      if (mapPinMain.offsetTop > 630 || moveEvt.clientY > 630) {
+      var topBorder = 170 - window.utils.PIN_HEIGHT;
+      var bottomBorder = 700 - window.utils.PIN_HEIGHT;
+
+      if (mapPinMain.offsetTop > bottomBorder || moveEvt.clientY > bottomBorder) {
         shift.y = 0;
-        mapPinMain.style.top = '630px';
-      } else if (mapPinMain.offsetTop < 130 || moveEvt.clientY < 130) {
+        mapPinMain.style.top = bottomBorder + 'px';
+      } else if (mapPinMain.offsetTop < topBorder || moveEvt.clientY < topBorder) {
         shift.y = 0;
-        mapPinMain.style.top = '130px';
+        mapPinMain.style.top = topBorder + 'px';
       }
 
       var leftBorder = 0;
@@ -59,6 +62,7 @@
 
       mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
       mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+      window.form.setAddressValue(mapPinMain, true);
     };
 
     var onMouseUp = function (upEvt) {
