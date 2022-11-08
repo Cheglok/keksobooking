@@ -23,10 +23,19 @@
     return set;
   };
 
+  var errorHandler = function (msg) {
+    var divNode = document.createElement('div');
+    divNode.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color:' +
+      ' red; position: absolute; left: 0; right: 0; font-size: 30px';
+    divNode.textContent = msg;
+    document.body.insertAdjacentElement('afterbegin', divNode);
+  };
+
   window.utils = {
     getRandomFromRange: getRandomFromRange,
     getRandomFromArray: getRandomFromArray,
     getRandomSet: getRandomSet,
+    errorHandler: errorHandler,
     PIN_WIDTH: 65,
     PIN_HEIGHT: 87,
     PHOTO_SIZE: 45,
