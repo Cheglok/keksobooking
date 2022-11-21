@@ -25,10 +25,18 @@
 
   var errorHandler = function (msg) {
     var divNode = document.createElement('div');
+    divNode.classList.add('error-message');
     divNode.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color:' +
       ' red; position: absolute; left: 0; right: 0; font-size: 30px';
     divNode.textContent = msg;
     document.body.insertAdjacentElement('afterbegin', divNode);
+  };
+
+  var removeErrorMessage = function () {
+    var errorMessageElement = document.querySelector('.error-message');
+    if (errorMessageElement) {
+      errorMessageElement.remove();
+    }
   };
 
   window.utils = {
@@ -36,6 +44,7 @@
     getRandomFromArray: getRandomFromArray,
     getRandomSet: getRandomSet,
     errorHandler: errorHandler,
+    removeErrorMessage: removeErrorMessage,
     PIN_WIDTH: 65,
     PIN_HEIGHT: 87,
     PHOTO_SIZE: 45,

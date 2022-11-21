@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var mapIsFadded = true;
+  window.adverts = [];
 
   var mapPinMain = document.querySelector('.map__pin--main');
   var main = document.querySelector('main');
@@ -19,8 +20,7 @@
   };
 
   var succesHandler = function (data) {
-    var rawAdverts = fixLocations(data);
-    var adverts = window.utils.getRandomSet(rawAdverts);
+    window.adverts = fixLocations(data);
     mapPinMain.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
 
@@ -78,8 +78,9 @@
         window.form.enableFormFields();
         // Добавляем данные на страницу
         if (mapIsFadded) {
-          window.pins.createPins(adverts);
-          window.card.createCard(upEvt, adverts);
+          var prefilteredAdverts = window.getFilteredAdverts();
+          window.pins.createPins(prefilteredAdverts);
+          window.card.createCard(prefilteredAdverts, upEvt);
           mapIsFadded = !mapIsFadded;
         }
         window.form.setAddressValue(mapPinMain, true);

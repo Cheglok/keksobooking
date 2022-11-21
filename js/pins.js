@@ -7,7 +7,7 @@
     var pins = document.querySelectorAll('.map__pin');
     for (var j = 0; j < pins.length; j++) {
       pins[j].addEventListener('click', function (evt) {
-        window.card.createCard(evt, adverts);
+        window.card.createCard(adverts, evt);
       });
     }
   };
@@ -16,7 +16,9 @@
     var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < adv.length; i++) {
+    var pinsCount = adv.length > 5 ? 5 : adv.length;
+
+    for (var i = 0; i < pinsCount; i++) {
       var pinElement = pinTemplate.cloneNode(true);
       pinElement.id = i;
       pinElement.style = 'left: ' + adv[i].location.lat + 'px; top: ' + adv[i].location.lng + 'px';
