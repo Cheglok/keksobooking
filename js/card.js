@@ -90,12 +90,18 @@
     addCloseListeners(cardElement);
   };
 
-  var createCard = function (cardEvt, advList) {
-    var id = cardEvt.currentTarget.id;
-    if (id) {
-      renderCard(advList[id]);
+  var createCard = function (advList, cardEvt) {
+    if (!cardEvt) {
+      console.log('lenght');
+      removeCard();
+      window.utils.errorHandler('Нет доступных предложений по вашему запросу')
     } else {
-      renderCard(advList[0]);
+      var id = cardEvt.currentTarget.id;
+      if (id) {
+        renderCard(advList[id]);
+      } else if (advList.length) {
+        renderCard(advList[0]);
+      }
     }
   };
 
