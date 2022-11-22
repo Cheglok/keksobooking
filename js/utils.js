@@ -39,14 +39,30 @@
     }
   };
 
+  var debounce = function (fun) {
+    var lastTimeout = null;
+
+    return function () {
+      var args = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        fun.apply(null, args);
+      }, window.utils.DEBOUNCE_INTERVAL);
+    };
+  };
+
   window.utils = {
     getRandomFromRange: getRandomFromRange,
     getRandomFromArray: getRandomFromArray,
     getRandomSet: getRandomSet,
     errorHandler: errorHandler,
     removeErrorMessage: removeErrorMessage,
+    debounce: debounce,
     PIN_WIDTH: 65,
     PIN_HEIGHT: 87,
     PHOTO_SIZE: 45,
+    DEBOUNCE_INTERVAL: 500,
   };
 })();

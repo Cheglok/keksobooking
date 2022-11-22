@@ -23,7 +23,7 @@
   // add filtration event listeners to all fields
   filterFormInputs.forEach(function (item) {
     item.addEventListener('change', function () {
-      refreshAdverts();
+      window.utils.debounce(refreshAdverts)();
     });
   });
 
