@@ -58,19 +58,13 @@
     });
   };
 
-
   var mapFilterContainerElement = document.querySelector('.map__filters-container');
 
   var renderCard = function (advert) {
-    var cardOnMap = document.querySelector('.map__card');
-    var cardElement;
-    if (cardOnMap) {
-      cardElement = cardOnMap;
-    } else {
-      var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
-      cardElement = cardTemplate.cloneNode(true);
-    }
+    var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
     var mapElement = document.querySelector('.map');
+
+    var cardElement = cardTemplate.cloneNode(true);
 
     cardElement.querySelector('.popup__avatar').src = advert.author.avatar;
     cardElement.querySelector('.popup__title').textContent = advert.offer.title;
@@ -91,17 +85,10 @@
   };
 
   var createCard = function (advList, cardEvt) {
-    if (!cardEvt) {
-      console.log('lenght');
-      removeCard();
-      window.utils.errorHandler('Нет доступных предложений по вашему запросу')
+    if (cardEvt && cardEvt.currentTarget.id) {
+      renderCard(advList[cardEvt.currentTarget.id]);
     } else {
-      var id = cardEvt.currentTarget.id;
-      if (id) {
-        renderCard(advList[id]);
-      } else if (advList.length) {
-        renderCard(advList[0]);
-      }
+      renderCard(advList[0]);
     }
   };
 

@@ -1,47 +1,59 @@
 'use strict';
 (function () {
-
+  // dom elements
   var filterForm = document.querySelector('.map__filters');
   var housingTypeSelect = filterForm.querySelector('#housing-type');
   var housingPriceSelect = filterForm.querySelector('#housing-price');
   var housingRoomsSelect = filterForm.querySelector('#housing-rooms');
   var housingGuestsSelect = filterForm.querySelector('#housing-guests');
-  // var filterWifiCheckbox = filterForm.querySelector('#filter-wifi');
-  // var filterDishwasherCheckbox = filterForm.querySelector('#filter-dishwasher');
-  // var filterParkingCheckbox = filterForm.querySelector('#filter-parking');
-  // var filterWasherCheckbox = filterForm.querySelector('#filter-washer');
-  // var filterElevatorCheckbox = filterForm.querySelector('#filter-elevator');
-  // var filterConditionerCheckbox = filterForm.querySelector('#filter-conditioner');
 
   var filterFormCheckboxes = filterForm.querySelectorAll('.map__checkbox');
+  var filterFormSelects = filterForm.querySelectorAll('.map__filter');
   var filterFormInputs = filterForm.querySelectorAll('.map__checkbox, .map__filter');
 
+  var resetFilterForm = function () {
+    filterFormSelects.forEach(function (select) {
+      select.value = 'any';
+    });
+    filterFormCheckboxes.forEach(function (checkbox) {
+      checkbox.checked = false;
+    });
+  };
+
+  // add filtration event listeners to all fields
   filterFormInputs.forEach(function (item) {
     item.addEventListener('change', function () {
-      refreshAdverts();
+      window.utils.debounce(refreshAdverts)();
     });
   });
 
-  var refreshAdverts = function () {
+  // refresh adverts after filtration, show new pins and card
+  var refreshAdverts = function (upEvt) {
+    // clean up the map
     window.utils.removeErrorMessage();
     window.pins.removePins();
-    window.pins.createPins(getFilteredAdverts());
-    window.card.createCard(getFilteredAdverts(), null);
+    window.card.removeCard();
+    // make filtration
+    var filteredAdverts = getFilteredAdverts();
+    // show new pins and card or error message
+    if (filteredAdverts.length) {
+      window.pins.createPins(filteredAdverts);
+      window.card.createCard(filteredAdverts, upEvt);
+    } else {
+      window.utils.errorHandler('Нет доступных предложений по вашему запросу');
+    }
   };
 
   var getFilteredAdverts = function () {
     var filteredAdverts = window.adverts.slice();
-    filteredAdverts = filteredAdverts.filter(filterAll);
-    console.log('filtration', filteredAdverts);
+    filteredAdverts = filteredAdverts.filter(function (adv) {
+      return checkType(adv) && checkPrice(adv) && checkRooms(adv) && checkGuests(adv) && checkFeatures(adv);
+    });
     return filteredAdverts;
   };
 
-  var filterAll = function (adv) {
-    return !(!checkType(adv) || !checkPrice(adv) || !checkRooms(adv) || !checkGuests(adv) || !checkFeatures(adv));
-  };
-
   var checkType = function (adv) {
-    return !(housingTypeSelect.value !== 'any' && adv.offer.type !== housingTypeSelect.value);
+    return housingTypeSelect.value === 'any' || adv.offer.type === housingTypeSelect.value;
   };
 
   var checkPrice = function (adv) {
@@ -67,11 +79,11 @@
   };
 
   var checkRooms = function (adv) {
-    return !(housingRoomsSelect.value !== 'any' && +housingRoomsSelect.value !== adv.offer.rooms);
+    return housingRoomsSelect.value === 'any' || +housingRoomsSelect.value === adv.offer.rooms;
   };
 
   var checkGuests = function (adv) {
-    return !(housingGuestsSelect.value !== 'any' && +housingGuestsSelect.value !== adv.offer.guests);
+    return housingGuestsSelect.value === 'any' || +housingGuestsSelect.value === adv.offer.guests;
   };
 
   var checkFeatures = function (adv) {
@@ -87,5 +99,8 @@
     return true;
   };
 
-  window.getFilteredAdverts = getFilteredAdverts;
+  window.filtration = {
+    refreshAdverts: refreshAdverts,
+    resetFilterForm: resetFilterForm,
+  };
 })();

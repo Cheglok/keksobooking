@@ -29,9 +29,9 @@
     capacityElement.value = '1';
     descriptionElement.value = '';
     imagesElement.value = '';
-    for (var i = 0; i < featuresElements.length; i++) {
-      featuresElements[i].removeAttribute('checked');
-    }
+    featuresElements.forEach(function (feature) {
+      feature.checked = false;
+    });
   };
 
   var setAddressValue = function (mapPin, active) {
@@ -44,32 +44,28 @@
     }
   };
 
-  var disableFormFields = function () {
+  var disableForm = function () {
+    adFormElement.classList.add('ad-form--disabled');
     adFormHeader.setAttribute('disabled', 'disabled');
-    for (var i = 0; i < adFormElements.length; i++) {
-      adFormElements[i].setAttribute('disabled', 'disabled');
-    }
+    adFormElements.forEach(function (element) {
+      element.setAttribute('disabled', 'disabled');
+    });
   };
 
-  var enableFormFields = function () {
+  var enableForm = function () {
+    adFormElement.classList.remove('ad-form--disabled');
     adFormHeader.removeAttribute('disabled');
-    for (var i = 0; i < adFormElements.length; i++) {
-      adFormElements[i].removeAttribute('disabled');
-    }
+    adFormElements.forEach(function (element) {
+      element.removeAttribute('disabled');
+    });
   };
 
   var resetForm = function () {
-    disableFormFields();
+    disableForm();
     resetFields();
   };
 
-  window.form = {
-    resetForm: resetForm,
-    enableFormFields: enableFormFields,
-    setAddressValue: setAddressValue,
-  };
-
-  disableFormFields();
+  disableForm();
 
   // Валидация формы --------------------------------------------------------------------------------
   // Валидация минимальной цены в зависимости от типа
@@ -134,14 +130,18 @@
   capacityElement.addEventListener('change', setGuestsValidity);
 
   var successHandler = function () {
-    // reset map
+    resetForm();
     window.map.resetMap();
-    // reset form
-    window.form.resetForm();
+    window.filtration.resetFilterForm();
   };
 
   adFormElement.addEventListener('submit', function (submitEvt) {
     submitEvt.preventDefault();
     window.backend.upload(new FormData(adFormElement), successHandler, window.utils.errorHandler);
   });
+
+  window.form = {
+    enableForm: enableForm,
+    setAddressValue: setAddressValue,
+  };
 })();

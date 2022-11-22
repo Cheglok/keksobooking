@@ -3,7 +3,7 @@
   var UPLOAD_URL = 'https://24.javascript.pages.academy/keksobooking';
   var DOWNLOAD_URL = 'https://27.javascript.pages.academy/keksobooking/data';
 
-
+  // Adding listeners to any XHR
   var addEventListeners = function (onSuccess, onError, xhr) {
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {

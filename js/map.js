@@ -75,12 +75,10 @@
         upEvt.preventDefault();
 
         // Активизируем форму
-        window.form.enableFormFields();
+        window.form.enableForm();
         // Добавляем данные на страницу
         if (mapIsFadded) {
-          var prefilteredAdverts = window.getFilteredAdverts();
-          window.pins.createPins(prefilteredAdverts);
-          window.card.createCard(prefilteredAdverts, upEvt);
+          window.filtration.refreshAdverts(upEvt);
           mapIsFadded = !mapIsFadded;
         }
         window.form.setAddressValue(mapPinMain, true);
@@ -95,11 +93,11 @@
   };
 
   var resetMap = function () {
-    // remove pins
     window.pins.removePins();
-    // remove card
     window.card.removeCard();
-    // disable map
+    window.utils.removeErrorMessage();
+    // place main pin to started position
+    window.pins.resetMainPin();
     map.classList.add('map--faded');
     // сброс адреса
     window.form.setAddressValue(mapPinMain, false);
