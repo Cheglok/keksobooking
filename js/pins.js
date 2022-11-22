@@ -16,9 +16,9 @@
     var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
     var fragment = document.createDocumentFragment();
 
-    var pinsCount = adv.length > 5 ? 5 : adv.length;
+    var pinsOnMap = adv.length > 5 ? 5 : adv.length;
 
-    for (var i = 0; i < pinsCount; i++) {
+    for (var i = 0; i < pinsOnMap; i++) {
       var pinElement = pinTemplate.cloneNode(true);
       pinElement.id = i;
       pinElement.style = 'left: ' + adv[i].location.lat + 'px; top: ' + adv[i].location.lng + 'px';
@@ -38,8 +38,14 @@
     }
   };
 
+  var resetMainPin = function () {
+    mainPinElement.style.left = '570px';
+    mainPinElement.style.top = '375px';
+  };
+
   window.pins = {
     createPins: createPins,
     removePins: removePins,
+    resetMainPin: resetMainPin,
   };
 })();

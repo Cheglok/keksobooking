@@ -25,7 +25,7 @@
 
   var errorHandler = function (msg) {
     var divNode = document.createElement('div');
-    divNode.classList.add('error-message');
+    divNode.className = 'error-message';
     divNode.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color:' +
       ' red; position: absolute; left: 0; right: 0; font-size: 30px';
     divNode.textContent = msg;
@@ -35,7 +35,7 @@
   var removeErrorMessage = function () {
     var errorMessageElement = document.querySelector('.error-message');
     if (errorMessageElement) {
-      errorMessageElement.remove();
+      document.querySelector('.error-message').remove();
     }
   };
 
