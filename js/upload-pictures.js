@@ -6,7 +6,7 @@
   var avatarElement = document.querySelector('.avatar');
   var avatarDropArea = document.querySelector('.ad-form-header__drop-zone');
 
-  var handleFile = function (file) {
+  var handleAvatar = function (file) {
     var fileName = file.name.toLowerCase();
 
     var matches = FILE_TYPES.some(function (it) {
@@ -43,21 +43,22 @@
   preventDragenterDragover(avatarDropArea);
 
   fileChooserAvatar.addEventListener('change', function () {
-    var file = fileChooserAvatar.files[0];
-    handleFile(file);
+    var avatar = fileChooserAvatar.files[0];
+    handleAvatar(avatar);
   });
 
   avatarDropArea.addEventListener('drop', function (e) {
     stopEvent(e);
     var dt = e.dataTransfer;
-    var file = dt.files[0];
-    handleFile(file);
+    var avatar = dt.files[0];
+    handleAvatar(avatar);
   });
 
   var fileChooserPhotos = document.querySelector('.ad-form__upload input[type=file]');
   var dropAreaPhotos = document.querySelector('.ad-form__drop-zone');
   var photoContainer = document.querySelector('.ad-form__photo-container');
-  var photoElement = document.querySelector('div.ad-form__photo');
+  var allPhotos = [];
+
 
   var renderPhoto = function (photo) {
     var reader = new FileReader();
@@ -69,9 +70,20 @@
       imgWrapper.style = 'overflow: hidden;';
       imgElement.style = 'width: 100%; height: 100%; overflow: hidden;';
       imgWrapper.appendChild(imgElement);
+      imgWrapper.draggable = true;
       photoContainer.appendChild(imgWrapper);
     });
     reader.readAsDataURL(photo);
+  };
+
+  var renderPhotos = function () {
+    var photoElements = document.querySelectorAll('div.ad-form__photo');
+    for (var i = 0; i < photoElements.length; i++) {
+      photoElements[i].remove();
+    }
+    allPhotos.forEach(function (photo) {
+      renderPhoto(photo);
+    });
   };
 
   var handlePhotos = function (photos) {
@@ -81,11 +93,12 @@
       var matches = FILE_TYPES.some(function (it) {
         return photoName.endsWith(it);
       });
-
       if (matches) {
-        renderPhoto(photo);
-        photoElement.remove();
+        allPhotos.push(photo);
       }
+    }
+    if (allPhotos.length) {
+      renderPhotos();
     }
   };
 
@@ -93,4 +106,14 @@
     var photos = fileChooserPhotos.files;
     handlePhotos(photos);
   });
+
+  preventDragenterDragover(dropAreaPhotos);
+  dropAreaPhotos.addEventListener('drop', function (e) {
+    stopEvent(e);
+    var dt = e.dataTransfer;
+    var files = dt.files;
+    handlePhotos(files);
+  });
+
+
 })();
