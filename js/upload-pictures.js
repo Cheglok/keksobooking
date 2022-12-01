@@ -54,24 +54,38 @@
     handleAvatar(avatar);
   });
 
+
   var fileChooserPhotos = document.querySelector('.ad-form__upload input[type=file]');
   var dropAreaPhotos = document.querySelector('.ad-form__drop-zone');
   var photoContainer = document.querySelector('.ad-form__photo-container');
   var allPhotos = [];
 
 
+  // var renderPhoto = function (photo) {
+  //   var reader = new FileReader();
+  //   reader.addEventListener('load', function () {
+  //     var imgElement = document.createElement('img');
+  //     imgElement.src = reader.result;
+  //     var imgWrapper = document.createElement('div');
+  //     imgWrapper.classList.add('ad-form__photo');
+  //     imgWrapper.style = 'overflow: hidden; cursor: move;';
+  //     imgElement.style = 'width: 100%; height: 100%; overflow: hidden;';
+  //     imgWrapper.appendChild(imgElement);
+  //     imgWrapper.draggable = true;
+  //     imgElement.draggable = false;
+  //     photoContainer.appendChild(imgWrapper);
+  //   });
+  //   reader.readAsDataURL(photo);
+  // };
+
   var renderPhoto = function (photo) {
     var reader = new FileReader();
     reader.addEventListener('load', function () {
       var imgElement = document.createElement('img');
       imgElement.src = reader.result;
-      var imgWrapper = document.createElement('div');
-      imgWrapper.classList.add('ad-form__photo');
-      imgWrapper.style = 'overflow: hidden;';
-      imgElement.style = 'width: 100%; height: 100%; overflow: hidden;';
-      imgWrapper.appendChild(imgElement);
-      imgWrapper.draggable = true;
-      photoContainer.appendChild(imgWrapper);
+      imgElement.classList.add('ad-form__photo');
+      imgElement.style = 'cursor: move;';
+      photoContainer.appendChild(imgElement);
     });
     reader.readAsDataURL(photo);
   };
@@ -116,4 +130,31 @@
   });
 
 
+  photoContainer.addEventListener('dragstart', function (e) {
+    e.target.classList.add('selected');
+  });
+
+  photoContainer.addEventListener('dragend', function (e) {
+    e.target.classList.remove('selected');
+  });
+
+  photoContainer.addEventListener('dragover', function (e) {
+    e.preventDefault();
+
+    var activeElement = photoContainer.querySelector('.selected');
+    var currentElement = e.target;
+
+    var isMoveable = activeElement !== currentElement &&
+      currentElement.classList.contains('ad-form__photo');
+
+    if (!isMoveable) {
+      return;
+    }
+
+    var nextElement = (currentElement === activeElement.nextElementSibling) ?
+      currentElement.nextElementSibling :
+      currentElement;
+
+    photoContainer.insertBefore(activeElement, nextElement);
+  });
 })();
