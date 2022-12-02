@@ -138,15 +138,25 @@
     e.target.classList.remove('selected');
   });
 
+  var checkTargetElement = function (cursorPositionX, cursorPositionY, currentElement) {
+    var currentElementCoord = currentElement.getBoundingClientRect();
+    var currentElementCenterTop = currentElementCoord.y + 15;
+    var currentElementCenterBottom = currentElementCoord.y + currentElementCoord.height - 15;
+    var currentElementCenterLeft = currentElementCoord.x + 15;
+    var currentElementCenterRight = currentElementCoord.x + currentElementCoord.width - 15;
+
+    return cursorPositionX > currentElementCenterLeft && cursorPositionX < currentElementCenterRight &&
+      cursorPositionY > currentElementCenterTop && cursorPositionY < currentElementCenterBottom;
+  };
+
   photoContainer.addEventListener('dragover', function (e) {
     e.preventDefault();
-
     var activeElement = photoContainer.querySelector('.selected');
     var currentElement = e.target;
 
     var isMoveable = activeElement !== currentElement &&
-      currentElement.classList.contains('ad-form__photo');
-
+      currentElement.classList.contains('ad-form__photo') &&
+      checkTargetElement(e.clientX, e.clientY, currentElement);
     if (!isMoveable) {
       return;
     }
