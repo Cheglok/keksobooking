@@ -785,10 +785,6 @@ fieldset {
   width: auto;
 }
 
-.ad-form__upload:last-of-type {
-  margin-right: 0;
-}
-
 .ad-form__drop-zone {
   height: 70px;
   padding: 10px 10px 5px;
@@ -1216,4 +1212,8 @@ fieldset {
   -webkit-transform: translateX(-50%);
       -ms-transform: translateX(-50%);
           transform: translateX(-50%);
+}
+
+.selected {
+  opacity: 0.6;
 }
